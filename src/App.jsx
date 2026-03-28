@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import CustomCursor from "./CustomCursor"
 import AboutSection from "./AboutSection"
 import FeaturedProject from "./FeaturedProject"
 import SIOKIDetail from "./SIOKIDetail"
@@ -50,31 +52,12 @@ function renderHL(text, shown, hl) {
 }
 
 export default function App() {
-  // Cursor
-  const [mouse, setMouse] = useState({ x: -100, y: -100 })
-  const ringPos = useRef({ x: -100, y: -100 })
-  const [ring, setRing] = useState({ x: -100, y: -100 })
-  const rafRef = useRef()
-
-  useEffect(() => {
-    const onMove = e => setMouse({ x: e.clientX, y: e.clientY })
-    window.addEventListener("mousemove", onMove)
-    const animate = () => {
-      ringPos.current.x += (mouse.x - ringPos.current.x) * 0.1
-      ringPos.current.y += (mouse.y - ringPos.current.y) * 0.1
-      setRing({ ...ringPos.current })
-      rafRef.current = requestAnimationFrame(animate)
-    }
-    rafRef.current = requestAnimationFrame(animate)
-    return () => { window.removeEventListener("mousemove", onMove); cancelAnimationFrame(rafRef.current) }
-  }, [mouse.x, mouse.y])
-
   // Clock
   const [time, setTime] = useState("")
   useEffect(() => {
     const tick = () => {
       const d = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
-      setTime(`${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")} IST`)
+      setTime(`${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")} IST`)
     }
     tick(); const id = setInterval(tick, 1000); return () => clearInterval(id)
   }, [])
@@ -138,10 +121,7 @@ export default function App() {
 
   return (
     <div style={{ background: T.bg, cursor: "none", fontFamily: "'Geist', sans-serif" }}>
-
-      {/* Cursor */}
-      <div style={{ position: "fixed", width: 8, height: 8, background: T.ac, borderRadius: "50%", left: mouse.x, top: mouse.y, transform: "translate(-50%,-50%)", pointerEvents: "none", zIndex: 9999 }} />
-      <div style={{ position: "fixed", width: 32, height: 32, border: "1px solid rgba(196,123,43,0.35)", borderRadius: "50%", left: ring.x, top: ring.y, transform: "translate(-50%,-50%)", pointerEvents: "none", zIndex: 9998 }} />
+      <CustomCursor />
 
       {/* NAV */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 56, padding: "0 60px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(245,244,241,0.92)", backdropFilter: "blur(16px)", borderBottom: `0.5px solid ${T.bd}` }}>
@@ -158,15 +138,31 @@ export default function App() {
       </nav>
 
       {/* S1 — IDENTITY */}
-      <section id="hero" style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 60px", overflow: "hidden" }}>
+      <motion.section 
+        id="hero" 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 60px", overflow: "hidden" }}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: 72, maxWidth: 1100, width: "100%" }}>
-          <div style={{ flexShrink: 0, position: "relative" }}>
+          <motion.div 
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            style={{ flexShrink: 0, position: "relative" }}
+          >
             <div style={{ width: 380, height: 380, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(196,123,43,0.2)", boxShadow: "0 32px 80px rgba(0,0,0,0.08)" }}>
               <img src="/abhijeet.jpeg" alt="Abhijeet Sant" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
             </div>
             <div style={{ position: "absolute", bottom: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: T.ac, border: `3px solid ${T.bg}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: T.bg, fontWeight: 700 }}>✓</div>
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
+          </motion.div>
+          <motion.div 
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            style={{ flex: 1, minWidth: 0 }}
+          >
             <div style={{ fontFamily: "'Geist', sans-serif", fontSize: 15, color: T.ts, marginBottom: 10 }}>
               Hi, I'm <span style={{ color: T.tx, fontWeight: 500 }}>@abhijeetsant,</span>
             </div>
@@ -181,9 +177,9 @@ export default function App() {
                 <div key={p} style={{ fontFamily: "'Geist', sans-serif", fontSize: 11, letterSpacing: "0.05em", color: PILL_MAP[wi] === i ? T.ac : T.ts, background: PILL_MAP[wi] === i ? "rgba(196,123,43,0.08)" : "transparent", border: `0.5px solid ${PILL_MAP[wi] === i ? "rgba(196,123,43,0.4)" : T.bd}`, padding: "9px 20px", borderRadius: 100, transition: "all 0.3s", cursor: "none", fontWeight: PILL_MAP[wi] === i ? 500 : 400 }}>{p}</div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* S2 — TYPEWRITER */}
       <section id="typewriter" ref={s2Ref} style={{ height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 60px", textAlign: "center", borderTop: `0.5px solid ${T.bd}`, background: T.bg2, position: "relative", overflow: "hidden" }}>
@@ -199,7 +195,7 @@ export default function App() {
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", opacity: ctaShow ? 1 : 0, transition: "opacity 0.8s ease" }}>
           {[
-            { label: "📂 My work", id: "work" },
+            { label: "📂 My work", id: "projects" },
             { label: "🧠 How I think", id: "decisions" },
             { label: "📄 My path", id: "about" },
             { label: "✉️ Let's talk", id: "contact", primary: true },
@@ -241,3 +237,4 @@ export default function App() {
     </div>
   )
 }
+
