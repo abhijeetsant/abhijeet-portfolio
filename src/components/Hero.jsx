@@ -87,11 +87,11 @@ export default function Hero() {
         background: 'rgba(15,15,15,0.85)',
         backdropFilter: 'blur(12px)'
       }}>
-        <div style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 15, fontWeight: 700, color: 'var(--white-hi)', letterSpacing: '0.04em' }}>AS</div>
+        <div style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 30, fontWeight: 700, color: 'var(--white-hi)', letterSpacing: '0.04em' }}>AS</div>
         <div style={{ display: 'flex', gap: 40, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
           {['About', 'Work', 'Decisions', 'Contact'].map(link => (
             <a key={link} href={`#${link.toLowerCase()}`} style={{
-              fontSize: 12, color: 'var(--white-mid)', textDecoration: 'none',
+              fontSize: 20, color: 'var(--white-mid)', textDecoration: 'none',
               letterSpacing: '0.08em', textTransform: 'uppercase'
             }}>{link}</a>
           ))}
