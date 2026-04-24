@@ -59,25 +59,28 @@ export default function About() {
         minHeight: '100vh',
         position: 'relative',
         display: 'flex',
-        padding: '0 80px'
+        gap: 'clamp(20px, 4vw, 80px)',
+        padding: '0 clamp(20px, 6vw, 80px)'
       }}
     >
       {/* Sticky photo */}
       <div style={{
-        flexshrink: 0,
-        marginLeft: 80,
+        flexShrink: 0,
+        marginLeft: 0,
         perspective: '10px',
-        width: 460,
+        width: '100%',
+        maxWidth: 460,
         height: 700,
         borderRadius: 16,
 
       }}>
         <motion.img
-          
-          src="/about.png"
+
+          src="/about.jpg"
           alt="Abhijeet Sant"
           style={{
-            width: 420,
+            width: '100%',
+            maxWidth: 420,
             height: 620,
             objectFit: 'cover',
             objectPosition: 'center center',
@@ -142,7 +145,7 @@ export default function About() {
           {' '}I want to shape something, not inherit it.
           {/* read the Full Story */}
           <a
-            href="/about"
+            href="/story.html"
             style={{
               display: 'block',
               fontSize: 15,
@@ -194,7 +197,7 @@ export default function About() {
           style={{ display: 'flex', gap: 32, alignItems: 'center' }}
         >
           <a
-            href="/abhijeet_sant.pdf"
+            href="/sant_abhijeet.pdf"
             download
             style={{
               fontSize: 17,

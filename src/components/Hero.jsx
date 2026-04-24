@@ -20,6 +20,7 @@ const rise = {
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
   const [clock, setClock] = useState('')
+  const [isWide, setIsWide] = useState(window.innerWidth >= 768)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,6 +41,13 @@ export default function Hero() {
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const handler = e => setIsWide(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
   }, [])
 
   useEffect(() => {
@@ -115,7 +123,7 @@ export default function Hero() {
           width: '60%', height: 'calc(100vh - 56px)', overflow: 'hidden'
         }}>
           <img
-            src="/hero-photo.png"
+            src="/hero-photo.jpg"
             alt="Abhijeet Sant"
             style={{
               width: '100%', height: '100%',
@@ -135,20 +143,6 @@ export default function Hero() {
             zIndex: 1
           }} />
         </div>
-
-        {/* Vertical label */}
-        <motion.div
-          initial="hidden" animate="show"
-          variants={rise} custom={1.3}
-          style={{
-            position: 'absolute', left: 20, top: '50%',
-            transform: 'translateY(-50%) rotate(-90deg)',
-            fontSize: 10, letterSpacing: '0.2em',
-            textTransform: 'uppercase', color: 'var(--white-lo)',
-            whiteSpace: 'nowrap', zIndex: 10
-          }}>
-          Product Manager · 2026
-        </motion.div>
 
         {/* Year tag */}
         <motion.div
@@ -188,7 +182,7 @@ export default function Hero() {
               fontWeight: 800, lineHeight: 1,
               letterSpacing: '-0.02em',
               color: 'var(--white-hi)', marginBottom: 32,
-              whiteSpace: 'nowrap'
+              whiteSpace: isWide ? 'nowrap' : 'normal'
             }}>
             Abhijeet Sant
           </motion.div>

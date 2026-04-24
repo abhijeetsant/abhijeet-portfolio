@@ -174,11 +174,15 @@ export default function FeaturedProject() {
             zIndex: 2, pointerEvents: 'none',
           }} />
 
-          <div style={{
-            display: 'flex',
-            width: 'max-content',
-            animation: 'ticker 50s linear infinite',
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              width: 'max-content',
+              animation: 'marquee 40s linear infinite',
+            }}
+            onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+            onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+          >
             {ticker.map((brand, i) => (
               <div
                 key={i}
@@ -207,7 +211,7 @@ export default function FeaturedProject() {
       </div>
 
       <style>{`
-        @keyframes ticker {
+        @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }

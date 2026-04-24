@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Both Paths Were Uncertain. One Just Had A Ceiling.</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.cdnfonts.com/css/geist" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-snap-type:y mandatory;overflow-y:scroll;}
+body{background:#0f0f0f;color:#e8e3dc;font-family:'Geist',sans-serif;}
+
+/* SCENES */
+.scene{
+  position:relative;
+  height:100vh;
+  width:100%;
+  scroll-snap-align:start;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:4rem 2rem;
+}
+
+/* PROGRESS BAR */
+.progress{
+  position:fixed;
+  left:0;top:0;
+  height:2px;
+  background:linear-gradient(90deg,#C47B2B,#d4943b);
+  z-index:500;
+  width:0%;
+  transition:width 0.1s linear;
+}
+
+/* SCENE COUNTER */
+.scene-counter{
+  position:fixed;
+  right:2.5rem;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  gap:0.6rem;
+  z-index:500;
+}
+.dot{
+  width:5px;height:5px;
+  border-radius:50%;
+  background:#333;
+  transition:background 0.3s ease, transform 0.3s ease;
+  cursor:pointer;
+}
+.dot.active{background:#C47B2B;transform:scale(1.6);}
+
+/* ── SCENE 0: ENTRY ── */
+#s0{background:#0f0f0f;}
+#s0 .inner{text-align:center;max-width:700px;}
+.entry-q{
+  font-family:'Kaisei Tokumin',serif;
+  font-style:italic;
+  font-size:clamp(1.6rem,3.8vw,2.8rem);
+  line-height:1.45;
+  color:#e8e3dc;
+  opacity:0;
+  transform:translateY(30px);
+  animation:rise 1.2s ease 0.5s forwards;
+}
+.entry-cue{
+  margin-top:3.5rem;
+  font-size:0.7rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:#C47B2B;
+  opacity:0;
+  animation:rise 0.8s ease 1.6s forwards;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+}
+.entry-cue::before,.entry-cue::after{content:'';width:30px;height:1px;background:#C47B2B;}
+.scroll-arrow{
+  margin-top:1.5rem;
+  opacity:0;
+  animation:rise 0.8s ease 2s forwards, bob 2s ease 2.5s infinite;
+  font-size:1.2rem;color:#C47B2B;
+}
+
+/* ── SCENE 1: TITLE ── */
+#s1{background:#111111;}
+#s1 .bg-text{
+  position:absolute;
+  font-family:'Kaisei Tokumin',serif;
+  font-size:clamp(5rem,18vw,16rem);
+  font-weight:600;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(196,123,43,0.07);
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+  line-height:1;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+}
+#s1 .inner{position:relative;z-index:2;}
+.title-label{
+  font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:#C47B2B;margin-bottom:1.8rem;
+  opacity:0;transform:translateY(20px);transition:all 0.7s ease 0.1s;
+}
+.big-title{
+  font-family:'Kaisei Tokumin',serif;
+  font-weight:600;
+  font-size:clamp(2.6rem,6.5vw,5.5rem);
+  line-height:1.1;
+  color:#f0ede8;
+  opacity:0;transform:translateY(30px);transition:all 0.9s ease 0.2s;
+}
+.big-title em{color:#C47B2B;font-style:italic;}
+.title-sub{
+  margin-top:2rem;
+  font-size:clamp(0.95rem,1.8vw,1.1rem);
+  line-height:1.7;
+  color:#7a756f;
+  max-width:480px;
+  opacity:0;transform:translateY(20px);transition:all 0.8s ease 0.4s;
+  font-family:'Kaisei Tokumin',serif;
+  font-style:italic;
+}
+.scene.active .title-label,
+.scene.active .big-title,
+.scene.active .title-sub{opacity:1;transform:translateY(0);}
+
+/* ── SCENES 2–6 ── */
+.scene-bg{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity 1.2s ease;
+}
+.scene.active .scene-bg{opacity:1;}
+
+#s2{background:#131313;}
+#s2 .scene-bg{background:radial-gradient(ellipse at 80% 50%, rgba(196,123,43,0.05) 0%, transparent 60%);}
+#s3{background:#101010;}
+#s3 .scene-bg{background:radial-gradient(ellipse at 20% 50%, rgba(180,60,40,0.06) 0%, transparent 60%);}
+#s4{background:#121212;}
+#s4 .scene-bg{background:radial-gradient(ellipse at 60% 30%, rgba(60,120,90,0.05) 0%, transparent 60%);}
+#s5{background:#111111;}
+#s5 .scene-bg{background:radial-gradient(ellipse at 30% 70%, rgba(196,123,43,0.06) 0%, transparent 60%);}
+#s6{background:#0f0f0f;}
+
+.section-num{
+  position:absolute;
+  font-family:'Kaisei Tokumin',serif;
+  font-size:clamp(6rem,18vw,14rem);
+  font-weight:600;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,0.03);
+  top:50%;right:5%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  user-select:none;
+  line-height:1;
+}
+
+.content-block{
+  max-width:640px;
+  position:relative;
+  z-index:2;
+}
+
+.s-label{
+  font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:#C47B2B;margin-bottom:1.2rem;
+  opacity:0;transform:translateX(-16px);
+  transition:all 0.6s ease 0.1s;
+}
+.s-heading{
+  font-family:'Kaisei Tokumin',serif;
+  font-size:clamp(1.8rem,3.8vw,3rem);
+  font-weight:600;line-height:1.25;
+  color:#f0ede8;margin-bottom:1.8rem;
+  opacity:0;transform:translateY(24px);
+  transition:all 0.8s ease 0.2s;
+}
+.s-body{
+  font-family:'Kaisei Tokumin',serif;
+  font-size:clamp(1rem,1.8vw,1.2rem);
+  line-height:1.85;
+  color:#a09890;
+  opacity:0;transform:translateY(16px);
+  transition:all 0.8s ease 0.35s;
+}
+.s-body p{margin-bottom:1rem;}
+.s-body p:last-child{margin-bottom:0;}
+
+.pull{
+  margin:1.4rem 0;
+  padding-left:1.4rem;
+  border-left:1px solid #C47B2B;
+}
+.pull p{
+  font-style:italic;
+  font-size:clamp(1.05rem,2vw,1.3rem) !important;
+  color:#e8e3dc !important;
+  line-height:1.6 !important;
+  margin:0 !important;
+}
+
+.scene.active .s-label{opacity:1;transform:translateX(0);}
+.scene.active .s-heading{opacity:1;transform:translateY(0);}
+.scene.active .s-body{opacity:1;transform:translateY(0);}
+
+/* ── SCENE 6: CLOSING ── */
+#s6 .inner{text-align:center;max-width:680px;}
+.closing-line{
+  font-family:'Kaisei Tokumin',serif;
+  font-style:italic;
+  font-size:clamp(1.5rem,3.5vw,2.5rem);
+  line-height:1.5;
+  color:#f0ede8;
+  opacity:0;transform:translateY(30px);
+  transition:all 0.9s ease 0.2s;
+}
+.closing-byline{
+  margin-top:3rem;
+  font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:#3a3530;
+  opacity:0;transition:all 0.8s ease 0.6s;
+}
+.closing-gold{
+  display:block;
+  width:40px;height:1px;
+  background:#C47B2B;
+  margin:2rem auto;
+  opacity:0;transition:all 0.6s ease 0.4s;
+}
+.scene.active .closing-line,
+.scene.active .closing-byline,
+.scene.active .closing-gold{opacity:1;transform:translateY(0);}
+
+/* NOISE */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9000;opacity:0.4;
+}
+
+@keyframes rise{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+@media(max-width:600px){
+  .scene-counter{display:none;}
+  .section-num{display:none;}
+  .scene{padding:3rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<a href="/" style="position:fixed;top:2rem;left:2.5rem;z-index:600;text-decoration:none;font-family:'Kaisei Tokumin',serif;font-weight:700;font-size:1.4rem;color:#e8e3dc;letter-spacing:0.02em;">AS</a>
+<div class="progress" id="prog"></div>
+
+<div class="scene-counter" id="counter"></div>
+
+<!-- S0: ENTRY -->
+<div class="scene" id="s0" data-index="0">
+  <div class="inner">
+    <p class="entry-q">"What would you do if you had everything you were supposed to want — and a voice inside kept asking: <em>is this everything you're capable of?</em>"</p>
+    <p class="entry-cue">Scroll to find out</p>
+    <div class="scroll-arrow">↓</div>
+  </div>
+</div>
+
+<!-- S1: TITLE -->
+<div class="scene" id="s1" data-index="1">
+  <div class="bg-text">Ceiling</div>
+  <div class="inner" style="max-width:700px;">
+    <p class="title-label">About</p>
+    <h1 class="big-title">Both Paths Were Uncertain.<br/><em>One Just Had A Ceiling.</em></h1>
+    <p class="title-sub">That voice brought me back to India. And I'm glad I listened.</p>
+  </div>
+</div>
+
+<!-- S2: FOUNDATION -->
+<div class="scene" id="s2" data-index="2">
+  <div class="scene-bg"></div>
+  <div class="section-num">01</div>
+  <div class="content-block">
+    <p class="s-label">Foundation</p>
+    <h2 class="s-heading">The US Gave Me a Lot.<br/>The Ceiling Was Real.</h2>
+    <div class="s-body">
+      <p>The US gave me real skills. I learned to think in systems, to understand users deeply, to take complexity and turn it into decisions that move products forward.</p>
+      <div class="pull"><p>"Skill without room to use it fully is just potential sitting in a box."</p></div>
+      <p>The ceiling wasn't loud. It was the accumulation of small realizations — that ownership would always be limited, that the version of myself I wanted to become had very little space inside the structure I was in. I was good at my job. But "good at the job" and "becoming who you're capable of becoming" are two very different destinations.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S3: THE SYSTEM -->
+<div class="scene" id="s3" data-index="3">
+  <div class="scene-bg"></div>
+  <div class="section-num">02</div>
+  <div class="content-block">
+    <p class="s-label">The System</p>
+    <h2 class="s-heading">The System Doesn't<br/>Announce Itself</h2>
+    <div class="s-body">
+      <p>The constraints don't arrive all at once. It's a gradual tightening — in immigration, in politics, in the quiet ways the ecosystem shifts who gets to build, own, and lead. You feel it slowly, like a room getting smaller while the lighting stays the same.</p>
+      <div class="pull"><p>"Staying hopeful inside a system not designed for you to win isn't resilience. It's delayed clarity."</p></div>
+      <p>I got my clarity early enough to do something about it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S4: THE BET -->
+<div class="scene" id="s4" data-index="4">
+  <div class="scene-bg"></div>
+  <div class="section-num">03</div>
+  <div class="content-block">
+    <p class="s-label">The Bet</p>
+    <h2 class="s-heading">India Wasn't<br/>The Safe Bet Either</h2>
+    <div class="s-body">
+      <p>Coming back was not the obvious move. The questions were real — will I get to work on something that outlasts the work itself? Will I find the right problems, the ones that actually matter?</p>
+      <div class="pull"><p>"India was uncertain in the way open doors are uncertain. A chance is everything when the alternative is a ceiling."</p></div>
+      <p>The ecosystem has crossed a real threshold. Capital is serious, founders are sharp, builders are solving hard problems without waiting for Western validation. Being early to the right place isn't risk. It's strategy.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S5: THE WINDOW -->
+<div class="scene" id="s5" data-index="5">
+  <div class="scene-bg"></div>
+  <div class="section-num">04</div>
+  <div class="content-block">
+    <p class="s-label">The Window</p>
+    <h2 class="s-heading">Hungry Enough to Learn.<br/>Ready Enough to Lead.</h2>
+    <div class="s-body">
+      <p>There is a window in every career where you are at your most dangerous — experienced enough to move fast, hungry enough to still absorb everything. That window doesn't stay open forever.</p>
+      <p>I'm immersing myself in how this market thinks, what it needs, where the real gaps are. Not from a distance — from inside it. The collaboration here is different. Less transactional, more alive. People are building things they believe in.</p>
+      <p>I want to shape something, not inherit it. And I'll say this plainly — being close to the people I love doesn't dilute ambition. It sharpens it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S6: CLOSING -->
+<div class="scene" id="s6" data-index="6">
+  <div class="inner">
+    <span class="closing-gold"></span>
+    <p class="closing-line">"The only question is — how long are you going to wait before you ask yourself the same thing?"</p>
+    <p class="closing-byline">Written in 2026 &nbsp;·&nbsp; Still being lived</p>
+  </div>
+</div>
+
+<script>
+  const scenes = document.querySelectorAll('.scene');
+  const dots = [];
+  const counter = document.getElementById('counter');
+  const prog = document.getElementById('prog');
+  const total = scenes.length;
+
+  // Build dots
+  scenes.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.addEventListener('click', () => s.scrollIntoView({behavior:'smooth'}));
+    counter.appendChild(d);
+    dots.push(d);
+  });
+
+  // Intersection observer
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const i = parseInt(e.target.dataset.index);
+      if(e.isIntersecting) {
+        e.target.classList.add('active');
+        dots.forEach((d,j) => d.classList.toggle('active', j===i));
+        prog.style.width = ((i/(total-1))*100)+'%';
+      }
+    });
+  }, {threshold: 0.6});
+
+  scenes.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
