@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 Temp Videos/
+node_modules/
+dist/
+Temp Videos/
+playwright-report/
+test-results/
