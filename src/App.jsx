@@ -1,26 +1,21 @@
 import './index.css'
-import Hero from './components/Hero'
-import ScrollReveal from './components/ScrollReveal'
-import About from './components/About'
-import FeaturedProject from './components/FeaturedProject'
-import SelectedProjects from './components/SelectedProjects'
-import DecisionLog from './components/DecisionLog'
-import MetricMarvels from './components/MetricMarvels'
-import Writing from './components/Writing'
-import Footer from './components/Footer'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import HomePage from './components/HomePage'
+import SIOKIProject1 from './components/SIOKIProject1'
+import LucidProject from './components/LucidProject'
+import SpecterProject from './components/SpecterProject'
+import CustomCursor from './CustomCursor'
 
 export default function App() {
   return (
-    <main>
-      <Hero />
-      <ScrollReveal />
-      <About />
-      <FeaturedProject />
-      <SelectedProjects />
-      <DecisionLog />
-      <MetricMarvels />
-      <Writing />
-      <Footer />
-    </main>
+    <BrowserRouter>
+      <CustomCursor />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects/sioki" element={<SIOKIProject1 />} />
+        <Route path="/projects/lucid" element={<LucidProject />} />
+        <Route path="/projects/specter" element={<SpecterProject />} />
+      </Routes>
+    </BrowserRouter>
   )
 }

@@ -50,42 +50,10 @@ export default function Hero() {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  useEffect(() => {
-    let mx = 0, my = 0, rx = 0, ry = 0
-    const cur = document.getElementById('cur')
-    const ring = document.getElementById('ring')
-    const move = e => { mx = e.clientX; my = e.clientY }
-    document.addEventListener('mousemove', move)
-    let raf
-    const loop = () => {
-      if (cur) { cur.style.left = mx + 'px'; cur.style.top = my + 'px' }
-      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1
-      if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px' }
-      raf = requestAnimationFrame(loop)
-    }
-    loop()
-    return () => {
-      document.removeEventListener('mousemove', move)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
+
 
   return (
     <>
-      {/* Cursor */}
-      <div id="cur" style={{
-        position: 'fixed', width: 7, height: 7,
-        background: 'var(--amber)', borderRadius: '50%',
-        pointerEvents: 'none', zIndex: 9999,
-        transform: 'translate(-50%,-50%)'
-      }} />
-      <div id="ring" style={{
-        position: 'fixed', width: 32, height: 32,
-        border: '1px solid rgba(196,123,43,0.35)',
-        borderRadius: '50%', pointerEvents: 'none',
-        zIndex: 9998, transform: 'translate(-50%,-50%)'
-      }} />
-
       {/* Nav */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0,

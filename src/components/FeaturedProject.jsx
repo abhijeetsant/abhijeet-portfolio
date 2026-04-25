@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { Link } from 'react-router-dom'
 
 const BRANDS = [
   'Instagram', 'Apple', 'Amazon', 'Netflix', 'Twitter',
@@ -35,13 +36,17 @@ export default function FeaturedProject() {
       </div>
 
       {/* Full bleed SIOKI image */}
-      <div
+      <Link
+        to="/projects/sioki"
+        data-cursor="view-project"
         style={{
+          display: 'block',
           position: 'relative',
           width: '100%',
           height: '65vh',
           overflow: 'hidden',
           cursor: 'none',
+          textDecoration: 'none'
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -89,43 +94,7 @@ export default function FeaturedProject() {
           </div>
         </div>
 
-        {/* Circular cursor button */}
-        <motion.div
-          animate={{
-            opacity: hovered ? 1 : 0,
-            scale: hovered ? 1 : 0.6,
-            x: mousePos.x - 60,
-            y: mousePos.y - 60,
-          }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          style={{
-            position: 'absolute',
-            width: 120,
-            height: 120,
-            borderRadius: '50%',
-            background: 'var(--bg-light)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10,
-            pointerEvents: 'none',
-            top: 0,
-            left: 0,
-          }}
-        >
-          <span style={{
-            fontSize: 11,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--text-primary)',
-            fontFamily: 'Geist, sans-serif',
-            textAlign: 'center',
-            lineHeight: 1.4,
-          }}>
-            View<br />Project
-          </span>
-        </motion.div>
-      </div>
+      </Link>
 
       {/* Quote — completely separate, on light bg */}
       <motion.div

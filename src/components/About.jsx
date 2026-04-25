@@ -36,10 +36,10 @@ const MediumIcon = () => (
 )
 
 const SOCIAL = [
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/abhijeetsant', Icon: LinkedInIcon },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/abhijeetsant05/', Icon: LinkedInIcon },
   { label: 'GitHub', href: 'https://github.com/abhijeetsant', Icon: GitHubIcon },
   { label: 'Substack', href: 'https://secondfurther.substack.com', Icon: SubstackIcon },
-  { label: 'Medium', href: 'https://medium.com/@abhijeetsant', Icon: MediumIcon },
+  { label: 'Medium', href: 'https://medium.com/@secondfurther', Icon: MediumIcon },
 ]
 
 export default function About() {

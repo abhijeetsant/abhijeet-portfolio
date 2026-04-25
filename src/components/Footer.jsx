@@ -11,10 +11,10 @@ const T = {
 
 const SOCIALS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/abhijeetsant05/" },
-  { label: "GitHub", href: "#" },
-  { label: "Substack", href: "#" },
-  { label: "Medium", href: "#" },
-  { label: "Product Hunt", href: "#" },
+  { label: "GitHub", href: "https://github.com/abhijeetsant" },
+  { label: "Substack", href: "https://substack.com/@secondfurther" },
+  { label: "Medium", href: "https://medium.com/@secondfurther" },
+  { label: "Product Hunt", href: "https://www.producthunt.com/@abhijeetsant" },
 ]
 
 function CopyField({ value, display }) {

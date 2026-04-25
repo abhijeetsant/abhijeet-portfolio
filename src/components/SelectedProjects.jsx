@@ -1,19 +1,20 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const PROJECTS = [
   {
     name: 'Lucid',
     category: 'AI Safety',
     description: 'AI-powered safety layer for Indian families navigating digital misinformation.',
-    href: '#',
+    to: '/projects/lucid',
     color: '#1a1a2e',
   },
   {
     name: 'Specter',
     category: 'RESEARCH TOOL',
     description: 'Synthetic user research agent that simulates target-persona reactions to product concepts.',
-    href: '#',
+    to: '/projects/specter',
     color: '#0f0f0f',
   },
 ]
@@ -27,18 +28,18 @@ export default function SelectedProjects() {
         </span>
       </div>
       {PROJECTS.map((project, i) => (
-        <ProjectRow key={project.name} project={project} index={i} />
+        <ProjectRow key={project.name} project={project} index={i} isLast={i === PROJECTS.length - 1} />
       ))}
     </section>
   )
 }
 
-function ProjectRow({ project, index }) {
+function ProjectRow({ project, index, isLast }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.a
-      href={project.href}
+    <Link to={project.to} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+    <motion.div
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
@@ -51,7 +52,7 @@ function ProjectRow({ project, index }) {
         alignItems: 'center',
         gap: 60,
         padding: '48px clamp(24px, 10vw, 250px)',
-        borderBottom: '0.5px solid var(--border-light)',
+        borderBottom: isLast ? 'none' : '0.5px solid var(--border-light)',
         textDecoration: 'none',
         cursor: 'pointer',
         background: hovered ? 'rgba(0,0,0,0.02)' : 'transparent',
@@ -115,13 +116,18 @@ function ProjectRow({ project, index }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              style={{ position: 'absolute', bottom: 16, right: 16, width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#fff' }}
+              style={{ position: 'absolute', bottom: 16, right: 16 }}
             >
-              →
+              <div
+                style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#fff' }}
+              >
+                →
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
-    </motion.a>
+    </motion.div>
+    </Link>
   )
 }
