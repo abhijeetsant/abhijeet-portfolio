@@ -25,13 +25,13 @@ export default function FeaturedProject() {
       {/* FEATURED PROJECT label */}
       <div style={{ textAlign: 'center', padding: '160px 80px 120px' }}>
         <span style={{
-          fontSize: 28,
-          letterSpacing: '0.28em',
-          textTransform: 'uppercase',
-          color: 'var(--text-muted)',
-          fontFamily: 'Geist, sans-serif',
+          fontFamily: 'Kaisei Tokumin, serif',
+          fontWeight: 700,
+          fontSize: 'clamp(28px, 3.5vw, 44px)',
+          color: '#111111',
+          letterSpacing: 0,
         }}>
-          Featured Project
+          Featured project.
         </span>
       </div>
 
@@ -55,43 +55,10 @@ export default function FeaturedProject() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(135deg, #04050f 0%, #1a1040 50%, #04050f 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%), url(/sioki-bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}>
-          <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-            <div style={{
-              fontSize: 11,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.4)',
-              marginBottom: 16,
-              fontFamily: 'Geist, sans-serif',
-            }}>
-              Product Strategy · 2026
-            </div>
-            <div style={{
-              fontFamily: 'Kaisei Tokumin, serif',
-              fontSize: 'clamp(72px, 12vw, 160px)',
-              fontWeight: 800,
-              color: '#ecb613',
-              lineHeight: 1,
-              letterSpacing: '-0.02em',
-            }}>
-              SIOKI
-            </div>
-            <div style={{
-              fontFamily: 'Geist, sans-serif',
-              fontSize: 16,
-              color: 'rgba(255,255,255,0.4)',
-              marginTop: 16,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-            }}>
-              Ship It or Kill It
-            </div>
-          </div>
         </div>
 
       </Link>
@@ -118,7 +85,7 @@ export default function FeaturedProject() {
           maxWidth: 760,
           margin: '0 auto',
         }}>
-          12 real decisions. The companies that made them.<br />
+          6 real decisions. The companies that made them.<br />
           The lessons they left behind.
         </p>
       </motion.div>

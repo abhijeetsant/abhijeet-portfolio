@@ -1,8 +1,8 @@
 import { motion } from 'motion/react'
 
 const LINES = [
-  "I've been doing this work longer than I knew what to call it. Trade finance platforms in the Nordics, workforce intelligence in the US, now building from India — three geographies, one discipline. I document my thinking. I defend my calls. I build in public.",
-  "The work speaks. This portfolio is the transcript."
+  "2026 is a strange year to be a PM. Half the function is being absorbed into AI; the other half is being asked to wield it. What survives is the work nobody can automate yet — judgment under pressure, decisions made before the data lands, the calls that look obvious in hindsight and impossible in the moment. I trained for this part deliberately.",
+  "Now I'm building it.",
 ]
 
 export default function ScrollReveal() {

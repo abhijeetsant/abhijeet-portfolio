@@ -4,6 +4,17 @@ import { motion } from 'motion/react'
 
 export default function SIOKIProject1() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, []);
 
   return (
     <div style={{ background: '#ffffff', color: '#111111', minHeight: '100vh', fontFamily: 'Geist, sans-serif' }}>
@@ -14,14 +25,13 @@ export default function SIOKIProject1() {
         padding: '32px clamp(20px, 4vw, 60px)',
       }}>
         <Link to="/" style={{ textDecoration: 'none', color: '#111111', fontSize: 20, fontWeight: 800, letterSpacing: '-0.04em' }}>
-          ABHIJEET SANT
+          A.Sant
         </Link>
-        <div style={{ display: 'flex', gap: 32, fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#111111' }}>
+        <div style={{ display: 'flex', gap: isMobile ? 12 : 32, fontSize: isMobile ? 11 : 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#111111', justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="/#work" style={{ textDecoration: 'none', color: 'inherit' }}>WORK</a>
           <a href="/#about" style={{ textDecoration: 'none', color: 'inherit' }}>ABOUT</a>
           <a href="/#thoughts" style={{ textDecoration: 'none', color: 'inherit' }}>THOUGHTS</a>
           <a href="/#contact" style={{ textDecoration: 'none', color: 'inherit' }}>MAIL</a>
-          <a href="https://twitter.com/abhijeetsant05" target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>TW</a>
           <a href="https://www.linkedin.com/in/abhijeetsant05/" target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>LI</a>
         </div>
       </nav>
@@ -30,46 +40,46 @@ export default function SIOKIProject1() {
       <section style={{ padding: '80px clamp(20px, 4vw, 60px) 120px', maxWidth: 1200, margin: '0 auto' }}>
         
         {/* Top Label */}
-        <div style={{ fontSize: 18, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 16 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0 }} style={{ fontSize: 18, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 16 }}>
           PROJECT SIOKI
-        </div>
-        
+        </motion.div>
+
         {/* Title */}
-        <h1 style={{ fontSize: 'clamp(64px, 8vw, 96px)', fontWeight: 700, lineHeight: 1.05, color: '#111111', margin: '0 0 16px 0', letterSpacing: '-0.03em' }}>
+        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }} style={{ fontSize: isMobile ? 'clamp(44px, 8vw, 96px)' : 'clamp(64px, 8vw, 96px)', fontWeight: 700, lineHeight: 1.05, color: '#111111', margin: '0 0 16px 0', letterSpacing: '-0.03em' }}>
           Ship It or Kill It
-        </h1>
-        
+        </motion.h1>
+
         {/* Subtitle */}
-        <div style={{ fontSize: 'clamp(24px, 3vw, 32px)', color: '#777', fontWeight: 400, marginBottom: 48 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} style={{ fontSize: 'clamp(24px, 3vw, 32px)', color: '#777', fontWeight: 400, marginBottom: 48 }}>
           PM judgment training through real product decisions
-        </div>
-        
+        </motion.div>
+
         {/* Divider */}
         <div style={{ width: '100%', height: '1px', backgroundColor: '#eaeaea', marginBottom: 24 }} />
-        
+
         {/* Date */}
-        <div style={{ fontSize: 16, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 80 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.45 }} style={{ fontSize: 16, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 80 }}>
           MARCH 2026
-        </div>
-        
+        </motion.div>
+
         {/* Large Paragraph */}
-        <p style={{ 
-          fontSize: 'clamp(28px, 4vw, 40px)', 
-          fontWeight: 600, 
-          lineHeight: 1.35, 
-          color: '#222', 
-          maxWidth: 960, 
-          marginBottom: 100, 
-          letterSpacing: '-0.02em' 
+        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.6 }} style={{
+          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontWeight: 600,
+          lineHeight: 1.35,
+          color: '#222',
+          maxWidth: 960,
+          marginBottom: 100,
+          letterSpacing: '-0.02em'
         }}>
           — PMs are evaluated on their decisions every day. Nobody trains them to make better ones. We built SIOKI as a simulator for product management judgment, anonymized for pure signal and functional learning.
-        </p>
+        </motion.p>
 
         {/* Divider */}
         <div style={{ width: '100%', height: '1px', backgroundColor: '#eaeaea', marginBottom: 24 }} />
 
         {/* Meta Labels */}
-        <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.75 }} style={{ display: 'flex', gap: 60, flexWrap: 'wrap', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           <div style={{ display: 'flex', gap: 24 }}>
             <span style={{ color: '#999' }}>ROLE</span>
             <span style={{ color: '#111', fontWeight: 500 }}>SOLOPRENEUR, PRODUCT MANAGER, BUILDER AND DESIGNER</span>
@@ -84,7 +94,7 @@ export default function SIOKIProject1() {
               SIOKI.VERCEL.APP
             </a>
           </div>
-        </div>
+        </motion.div>
 
       </section>
       
@@ -253,9 +263,7 @@ export default function SIOKIProject1() {
             Nobody could define judgment. Nobody trained it. Everyone evaluated for it.
           </div>
           {/* IMAGE BLOCK */}
-          <div style={{ width: '100%', aspectRatio: '4/5', backgroundColor: '#f5f5f5', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc' }}>
-            <div style={{ fontSize: 12, letterSpacing: '0.1em', color: '#999', textTransform: 'uppercase' }}>[ SIOKI IMAGE 1 ]</div>
-          </div>
+          <img src="/sioki-callsign.png" style={{width:'100%',height:'100%',objectFit:'cover',display:'block',borderRadius:8}} alt="SIOKI callsign screen" />
         </div>
         <div style={{ flex: '2 1 500px', display: 'flex', flexDirection: 'column', gap: 32 }}>
           <div style={{ fontSize: 'clamp(18px, 2vw, 22px)', color: '#444', lineHeight: 1.6, fontWeight: 400 }}>
@@ -280,7 +288,7 @@ export default function SIOKIProject1() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto', borderTop: '1px solid #eaeaea' }}
+        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto' }}
       >
         <div style={{ display: 'flex', gap: 'clamp(60px, 10vw, 140px)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <div style={{ flex: '1 1 300px' }}>
@@ -330,7 +338,7 @@ export default function SIOKIProject1() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto', borderTop: '1px solid #eaeaea' }}
+        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto' }}
       >
         <div style={{ display: 'flex', gap: 'clamp(60px, 10vw, 140px)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <div style={{ flex: '1 1 300px' }}>
@@ -342,9 +350,7 @@ export default function SIOKIProject1() {
               The GTM strategy was researched and documented before a single outreach message was sent.
             </div>
             {/* IMAGE BLOCK 2 */}
-            <div style={{ width: '100%', aspectRatio: '1/1', backgroundColor: '#f5f5f5', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc' }}>
-              <div style={{ fontSize: 12, letterSpacing: '0.1em', color: '#999', textTransform: 'uppercase' }}>[ SIOKI IMAGE 2 ]</div>
-            </div>
+            <img src="/sioki-archetype.png" style={{width:'100%',height:'100%',objectFit:'cover',display:'block',borderRadius:8}} alt="SIOKI archetype reveal" />
           </div>
           <div style={{ flex: '2 1 500px', display: 'flex', flexDirection: 'column', gap: 40 }}>
             <div>
@@ -441,7 +447,7 @@ export default function SIOKIProject1() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1 }}
-        style={{ borderTop: '1px solid #eaeaea', marginTop: 80 }}
+        style={{ marginTop: 80 }}
       >
         <Link 
           to="/projects/lucid" 

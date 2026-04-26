@@ -2,9 +2,7 @@ import { useRef, useState, useEffect } from "react"
 
 const T = {
   bg: "#F5F4F1",
-  bg2: "#EEECEA",
   tx: "#111111",
-  ts: "#666666",
   tm: "#999999",
   ac: "#C47B2B",
   bd: "rgba(0,0,0,0.08)",
@@ -67,175 +65,349 @@ const ARTICLES = [
   },
 ]
 
+const N = ARTICLES.length
+const CLONED = [...ARTICLES, ...ARTICLES, ...ARTICLES, ...ARTICLES, ...ARTICLES]
+const CARD_GAP = 24
+
 export default function Writing() {
-  const trackRef = useRef()
-  const headerRef = useRef()
-  const [headerVisible, setHeaderVisible] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
-  const [startX, setStartX] = useState(0)
-  const [scrollLeft, setScrollLeft] = useState(0)
-  const [hoveredId, setHoveredId] = useState(null)
-  const autoRef = useRef()
+  const [cardWidth, setCardWidth] = useState(window.innerWidth < 768 ? 320 : 400)
+  const cardStride = cardWidth + CARD_GAP
 
   useEffect(() => {
-    const obs = new IntersectionObserver(e => {
-      if (e[0].isIntersecting) setHeaderVisible(true)
+    const handler = () => setCardWidth(window.innerWidth < 768 ? 320 : 400)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+
+  const [activeIndex, setActiveIndex] = useState(N * 2) // start at middle set
+  const [noTransition, setNoTransition] = useState(false)
+  const [wrapperWidth, setWrapperWidth] = useState(0)
+  const [headerVisible, setHeaderVisible] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+
+  const headerRef = useRef()
+  const wrapperRef = useRef()
+  const dragStartX = useRef(null)
+  const touchStartX = useRef(null)
+  const didDrag = useRef(false)
+  const jumpTimerRef = useRef(null)
+
+  // Header fade-in
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) setHeaderVisible(true)
     }, { threshold: 0.3 })
     if (headerRef.current) obs.observe(headerRef.current)
     return () => obs.disconnect()
   }, [])
 
-  // Auto scroll
+  // Measure wrapper width for centering offset
   useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-    autoRef.current = setInterval(() => {
-      if (!isDragging) {
-        track.scrollLeft += 0.5
-        if (track.scrollLeft >= track.scrollWidth - track.clientWidth) {
-          track.scrollLeft = 0
-        }
-      }
-    }, 16)
-    return () => clearInterval(autoRef.current)
-  }, [isDragging])
+    if (!wrapperRef.current) return
+    const ro = new ResizeObserver(([e]) => setWrapperWidth(e.contentRect.width))
+    ro.observe(wrapperRef.current)
+    return () => ro.disconnect()
+  }, [])
 
+  // Auto-advance every 3s — pauses when isPaused
+  useEffect(() => {
+    if (isPaused) return
+    const id = setInterval(() => {
+      setActiveIndex(i => i + 1)
+    }, 1800)
+    return () => clearInterval(id)
+  }, [isPaused])
+
+  // Infinite loop: silently jump back to middle set after transition completes.
+  // Uses a single ref timer so rapid navigation only fires one jump.
+  useEffect(() => {
+    clearTimeout(jumpTimerRef.current)
+
+    if (activeIndex >= N * 4) {
+      jumpTimerRef.current = setTimeout(() => {
+        setNoTransition(true)
+        setActiveIndex(i => i - N * 2)
+      }, 640)
+    } else if (activeIndex < N) {
+      jumpTimerRef.current = setTimeout(() => {
+        setNoTransition(true)
+        setActiveIndex(i => i + N * 2)
+      }, 640)
+    }
+
+    return () => clearTimeout(jumpTimerRef.current)
+  }, [activeIndex])
+
+  // Re-enable transition two frames after silent jump
+  useEffect(() => {
+    if (!noTransition) return
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setNoTransition(false))
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [noTransition])
+
+  const advance = (delta) => {
+    setActiveIndex(i => Math.max(0, Math.min(CLONED.length - 1, i + delta)))
+  }
+
+  // Mouse drag
   const onMouseDown = (e) => {
-    setIsDragging(true)
-    setStartX(e.pageX - trackRef.current.offsetLeft)
-    setScrollLeft(trackRef.current.scrollLeft)
+    dragStartX.current = e.clientX
+    didDrag.current = false
   }
-  const onMouseMove = (e) => {
-    if (!isDragging) return
-    e.preventDefault()
-    const x = e.pageX - trackRef.current.offsetLeft
-    trackRef.current.scrollLeft = scrollLeft - (x - startX)
+  const onMouseUp = (e) => {
+    if (dragStartX.current === null) return
+    const delta = dragStartX.current - e.clientX
+    if (Math.abs(delta) > 60) {
+      didDrag.current = true
+      advance(delta > 0 ? 1 : -1)
+    }
+    dragStartX.current = null
   }
-  const onMouseUp = () => setIsDragging(false)
+
+  // Touch drag
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null) return
+    const delta = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(delta) > 60) advance(delta > 0 ? 1 : -1)
+    touchStartX.current = null
+  }
+
+  const trackOffset = -(activeIndex * cardStride) + (wrapperWidth / 2 - cardWidth / 2)
 
   return (
-    <section style={{ background: T.bg, borderTop: `0.5px solid ${T.bd}`, paddingBottom: 80 }}>
+    <section style={{
+      background: T.bg,
+      paddingBottom: 80,
+      overflow: "hidden",
+    }}>
 
       {/* Header */}
-      <div ref={headerRef} style={{
-        padding: "80px 60px 48px",
-        display: "flex", justifyContent: "space-between", alignItems: "flex-end",
-        maxWidth: 1100, margin: "0 auto",
-        opacity: headerVisible ? 1 : 0,
-        transform: headerVisible ? "translateY(0)" : "translateY(20px)",
-        transition: "opacity 0.7s ease, transform 0.7s ease",
-      }}>
-        <div>
-          <div style={{ fontFamily: "'Geist', sans-serif", fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: T.tm, marginBottom: 12 }}>[ 02 ] · Writing</div>
-          <div style={{ fontFamily: "'Kaisei Tokumin', serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,44px)", letterSpacing: "-1.5px", color: T.tx, lineHeight: 1.08 }}>
-            Thinking in public.
-          </div>
-        </div>
-        <div style={{ fontFamily: "'Geist', sans-serif", fontSize: 11, color: T.tm, letterSpacing: "0.06em" }}>
-          Drag to explore →
-        </div>
-      </div>
-
-      {/* Horizontal scroll track */}
       <div
-        ref={trackRef}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseUp}
+        ref={headerRef}
         style={{
-          display: "flex",
-          gap: 16,
-          overflowX: "scroll",
-          paddingLeft: 60,
-          paddingRight: 60,
-          scrollbarWidth: "none",
-          cursor: isDragging ? "grabbing" : "grab",
-          userSelect: "none",
+          textAlign: "center",
+          padding: "80px 60px 48px",
+          opacity: headerVisible ? 1 : 0,
+          transform: headerVisible ? "translateY(0)" : "translateY(20px)",
+          transition: "opacity 0.7s ease, transform 0.7s ease",
         }}
       >
-        {[...ARTICLES, ...ARTICLES].map((article, idx) => (
-          <a
-            key={`${article.id}-${idx}`}
-            href={article.href}
-            target="_blank"
-            rel="noreferrer"
-            onMouseEnter={() => setHoveredId(article.id)}
-            onMouseLeave={() => setHoveredId(null)}
-            onClick={e => isDragging && e.preventDefault()}
-            style={{
-              flexShrink: 0,
-              width: 320,
-              padding: "32px 28px",
-              background: hoveredId === article.id ? T.bg2 : T.bg,
-              border: `0.5px solid ${hoveredId === article.id ? "rgba(0,0,0,0.16)" : T.bd}`,
-              borderRadius: 4,
-              textDecoration: "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: 0,
-              transition: "background 0.25s, border-color 0.25s, transform 0.25s",
-              transform: hoveredId === article.id ? "translateY(-4px)" : "translateY(0)",
-              cursor: "none",
-            }}
-          >
-            {/* Platform + tag */}
-            <div style={{ display: "flex", gap: 8, marginBottom: 20, alignItems: "center" }}>
-              <div style={{
-                fontFamily: "'Geist', sans-serif", fontSize: 9, letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: article.featured ? T.ac : T.tm,
-                border: `0.5px solid ${article.featured ? "rgba(196,123,43,0.4)" : T.bd}`,
-                padding: "3px 9px", borderRadius: 100,
-                background: article.featured ? "rgba(196,123,43,0.07)" : "transparent",
-              }}>{article.platform}</div>
-              <div style={{ fontFamily: "'Geist', sans-serif", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: T.tm }}>
-                {article.tag}
-              </div>
-            </div>
-
-            {/* Title */}
-            <div style={{
-              fontFamily: "'Kaisei Tokumin', serif",
-              fontWeight: 700,
-              fontSize: "clamp(16px,1.4vw,19px)",
-              letterSpacing: "-0.4px",
-              lineHeight: 1.3,
-              color: T.tx,
-              marginBottom: 16,
-              flex: 1,
-            }}>{article.title}</div>
-
-            {/* Description */}
-            <p style={{
-              fontFamily: "'Geist', sans-serif",
-              fontSize: 13,
-              fontWeight: 300,
-              color: T.ts,
-              lineHeight: 1.7,
-              marginBottom: 24,
-            }}>{article.desc}</p>
-
-            {/* Read link */}
-            <div style={{
-              fontFamily: "'Geist', sans-serif",
-              fontSize: 11,
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: hoveredId === article.id ? T.ac : T.tm,
-              transition: "color 0.2s",
-            }}>Read →</div>
-          </a>
-        ))}
-
-        {/* End spacer */}
-        <div style={{ flexShrink: 0, width: 20 }} />
+        <div style={{
+          fontFamily: "'Kaisei Tokumin', serif",
+          fontWeight: 700,
+          fontSize: "clamp(28px,3.5vw,44px)",
+          color: "#111111",
+        }}>
+          Thinking in public.
+        </div>
       </div>
 
-      <style>{`
-        div::-webkit-scrollbar { display: none; }
-      `}</style>
+      {/* Carousel wrapper */}
+      <div
+        ref={wrapperRef}
+        style={{ position: "relative", width: "100%", overflow: "hidden", cursor: "grab" }}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => {
+          dragStartX.current = null
+          setIsPaused(false)
+        }}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        {/* Left arrow */}
+        <button
+          onClick={(e) => { e.stopPropagation(); advance(-1) }}
+          style={{
+            position: "absolute", left: 24, top: "50%", transform: "translateY(-50%)",
+            zIndex: 10, width: 48, height: 48, borderRadius: "50%",
+            background: "rgba(0,0,0,0.08)", border: "none", fontSize: 20,
+            cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+            transition: "background 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = "rgba(0,0,0,0.15)"}
+          onMouseLeave={e => e.currentTarget.style.background = "rgba(0,0,0,0.08)"}
+        >←</button>
+
+        {/* Right arrow */}
+        <button
+          onClick={(e) => { e.stopPropagation(); advance(1) }}
+          style={{
+            position: "absolute", right: 24, top: "50%", transform: "translateY(-50%)",
+            zIndex: 10, width: 48, height: 48, borderRadius: "50%",
+            background: "rgba(0,0,0,0.08)", border: "none", fontSize: 20,
+            cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+            transition: "background 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = "rgba(0,0,0,0.15)"}
+          onMouseLeave={e => e.currentTarget.style.background = "rgba(0,0,0,0.08)"}
+        >→</button>
+
+        {/* Track */}
+        <div style={{
+          display: "flex",
+          gap: CARD_GAP,
+          transform: `translateX(${trackOffset}px)`,
+          transition: noTransition
+            ? "none"
+            : "transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)",
+          willChange: "transform",
+          paddingTop: 24,
+          paddingBottom: 60,
+          userSelect: "none",
+        }}>
+          {CLONED.map((article, idx) => {
+            const dist = Math.abs(idx - activeIndex)
+            const isActive = dist === 0
+            const opacity = isActive ? 1 : dist === 1 ? 0.5 : 0.25
+            const scale = isActive ? 1 : dist === 1 ? 0.92 : 0.85
+            const isSubstack = article.platform.toLowerCase().includes("substack")
+            const isMedium = article.platform.toLowerCase().includes("medium")
+            const platformColor = isSubstack ? "#FF6719" : "#000000"
+
+            return (
+              <a
+                key={idx}
+                href={article.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={e => {
+                  if (didDrag.current) { e.preventDefault(); return }
+                  if (!isActive) { e.preventDefault(); advance(idx - activeIndex) }
+                }}
+                style={{
+                  flexShrink: 0,
+                  width: cardWidth,
+                  height: 480,
+                  padding: 32,
+                  background: article.featured ? "rgba(196,123,43,0.03)" : "#ffffff",
+                  border: article.featured
+                    ? "1px solid rgba(196,123,43,0.3)"
+                    : "0.5px solid rgba(0,0,0,0.08)",
+                  borderRadius: 12,
+                  textDecoration: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  boxShadow: isActive
+                    ? "0 8px 40px rgba(0,0,0,0.12)"
+                    : "0 2px 20px rgba(0,0,0,0.06)",
+                  opacity,
+                  transform: `scale(${scale})`,
+                  transition: "opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease",
+                }}
+              >
+                {/* Top block */}
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    {isSubstack && (
+                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="18" cy="18" r="18" fill="#FF6719"/>
+                        <path d="M8 12h20v2.5H8zm0 5h20v2.5H8zm0 5h20v2.5H8z" fill="white"/>
+                      </svg>
+                    )}
+                    {isMedium && (
+                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="18" cy="18" r="18" fill="#000"/>
+                        <ellipse cx="13" cy="18" rx="5" ry="6.5" fill="white"/>
+                        <ellipse cx="24" cy="18" rx="3" ry="6" fill="white"/>
+                        <ellipse cx="30" cy="18" rx="2" ry="5" fill="white"/>
+                      </svg>
+                    )}
+                    <div style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: 10,
+                      letterSpacing: "0.15em",
+                      textTransform: "uppercase",
+                      color: platformColor,
+                      border: `0.5px solid ${platformColor}`,
+                      borderRadius: 100,
+                      padding: "3px 10px",
+                      opacity: 0.85,
+                    }}>{article.platform}</div>
+                  </div>
+
+                  <div style={{
+                    fontFamily: "'Kaisei Tokumin', serif",
+                    fontWeight: 700,
+                    fontSize: "clamp(22px,2.2vw,32px)",
+                    letterSpacing: "-0.4px",
+                    lineHeight: 1.2,
+                    color: T.tx,
+                    marginTop: 20,
+                  }}>{article.title}</div>
+
+                  <p style={{
+                    fontFamily: "'Geist', sans-serif",
+                    fontSize: 16,
+                    fontWeight: 300,
+                    color: "#444444",
+                    lineHeight: 1.75,
+                    marginTop: 12,
+                    marginBottom: 0,
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                  }}>{article.desc}</p>
+                </div>
+
+                {/* Bottom block */}
+                <div>
+                  <div style={{ height: 1, background: "rgba(0,0,0,0.06)", marginTop: 24 }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
+                    <div style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: 10,
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      color: "#999999",
+                    }}>{article.tag}</div>
+                    <div style={{
+                      fontFamily: "'Geist', sans-serif",
+                      fontSize: 11,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: T.ac,
+                    }}>Read →</div>
+                  </div>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 8 }}>
+        {ARTICLES.map((_, idx) => {
+          const isActiveDot = (activeIndex % N) === idx
+          return (
+            <button
+              key={idx}
+              onClick={() => {
+                const base = Math.floor(activeIndex / N) * N
+                advance(base + idx - activeIndex)
+              }}
+              style={{
+                width: isActiveDot ? 24 : 8,
+                height: 8,
+                borderRadius: 4,
+                background: isActiveDot ? T.ac : "rgba(0,0,0,0.15)",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                transition: "width 0.3s ease, background 0.3s ease",
+              }}
+            />
+          )
+        })}
+      </div>
+
     </section>
   )
 }

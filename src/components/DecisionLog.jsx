@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -49,6 +49,13 @@ const DECISIONS = [
 export default function DecisionLog() {
   const sectionRef = useRef(null)
   const containerRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   useEffect(() => {
     const cards = gsap.utils.toArray('.decision-card', containerRef.current)
@@ -114,11 +121,9 @@ export default function DecisionLog() {
       }}>
         <div style={{
           fontFamily: 'Kaisei Tokumin, serif',
-          fontWeight: 800,
-          fontSize: 'clamp(32px, 4vw, 52px)',
-          letterSpacing: '-1px',
-          lineHeight: 1.05,
-          color: 'var(--text-muted)',
+          fontWeight: 700,
+          fontSize: 'clamp(28px, 3.5vw, 44px)',
+          color: '#111111',
         }}>
           The calls I made.
         </div>
@@ -128,7 +133,7 @@ export default function DecisionLog() {
       <div
         ref={containerRef}
         style={{
-          padding: '0 80px 120px',
+          padding: isMobile ? '0 20px 80px' : '0 80px 120px',
           display: 'flex',
           justifyContent: 'center',
         }}
@@ -151,7 +156,7 @@ export default function DecisionLog() {
                 top: 0, left: 0, right: 0, bottom: 32,
                 background: '#0f0f0f',
                 borderRadius: 20,
-                padding: '48px 52px',
+                padding: isMobile ? '32px 24px' : '48px 52px',
                 color: 'white',
                 overflow: 'hidden',
                 willChange: 'transform, opacity',

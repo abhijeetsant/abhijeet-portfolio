@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 
@@ -15,6 +16,18 @@ const imgPlaceholder = (label, ratio = '4/5') => (
 )
 
 export default function LucidProject() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, []);
+
   return (
     <div style={{ background: '#ffffff', color: '#111111', minHeight: '100vh', fontFamily: 'Geist, sans-serif' }}>
 
@@ -24,36 +37,37 @@ export default function LucidProject() {
         padding: '32px clamp(20px, 4vw, 60px)',
       }}>
         <Link to="/" style={{ textDecoration: 'none', color: '#111111', fontSize: 20, fontWeight: 800, letterSpacing: '-0.04em' }}>
-          ABHIJEET SANT
+          A.Sant
         </Link>
-        <div style={{ display: 'flex', gap: 32, fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#111111' }}>
+        <div style={{ display: 'flex', gap: isMobile ? 12 : 32, fontSize: isMobile ? 11 : 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#111111', justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="/#work" style={{ textDecoration: 'none', color: 'inherit' }}>WORK</a>
           <a href="/#about" style={{ textDecoration: 'none', color: 'inherit' }}>ABOUT</a>
           <a href="/#thoughts" style={{ textDecoration: 'none', color: 'inherit' }}>THOUGHTS</a>
           <a href="/#contact" style={{ textDecoration: 'none', color: 'inherit' }}>MAIL</a>
+          <a href="https://www.linkedin.com/in/abhijeetsant05/" target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>LI</a>
         </div>
       </nav>
 
       {/* Hero */}
       <section style={{ padding: '80px clamp(20px, 4vw, 60px) 120px', maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ fontSize: 18, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 16 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0 }} style={{ fontSize: 18, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 16 }}>
           PROJECT LUCID
-        </div>
-        <h1 style={{ fontSize: 'clamp(64px, 8vw, 96px)', fontWeight: 700, lineHeight: 1.05, color: '#111111', margin: '0 0 16px 0', letterSpacing: '-0.03em' }}>
+        </motion.div>
+        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }} style={{ fontSize: isMobile ? 'clamp(44px, 8vw, 96px)' : 'clamp(64px, 8vw, 96px)', fontWeight: 700, lineHeight: 1.05, color: '#111111', margin: '0 0 16px 0', letterSpacing: '-0.03em' }}>
           AI Safety for<br />Indian Families
-        </h1>
-        <div style={{ fontSize: 'clamp(24px, 3vw, 32px)', color: '#777', fontWeight: 400, marginBottom: 48 }}>
+        </motion.h1>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} style={{ fontSize: 'clamp(24px, 3vw, 32px)', color: '#777', fontWeight: 400, marginBottom: 48 }}>
           Passive, invisible, always on.
-        </div>
+        </motion.div>
         <div style={{ width: '100%', height: '1px', backgroundColor: '#eaeaea', marginBottom: 24 }} />
-        <div style={{ fontSize: 16, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 80 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.45 }} style={{ fontSize: 16, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999', marginBottom: 80 }}>
           JANUARY 2026
-        </div>
-        <p style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 600, lineHeight: 1.35, color: '#222', maxWidth: 960, marginBottom: 100, letterSpacing: '-0.02em' }}>
+        </motion.div>
+        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.6 }} style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 600, lineHeight: 1.35, color: '#222', maxWidth: 960, marginBottom: 100, letterSpacing: '-0.02em' }}>
           — India has 900 million internet users. ₹1,935 crore was lost to digital arrest scams in 2024. Every existing deepfake detection product assumes the user knows they need protection. In India, that assumption fails.
-        </p>
+        </motion.p>
         <div style={{ width: '100%', height: '1px', backgroundColor: '#eaeaea', marginBottom: 24 }} />
-        <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.75 }} style={{ display: 'flex', gap: 60, flexWrap: 'wrap', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           <div style={{ display: 'flex', gap: 24 }}>
             <span style={{ color: '#999' }}>TYPE</span>
             <span style={{ color: '#111', fontWeight: 500 }}>PORTFOLIO CASE STUDY</span>
@@ -66,7 +80,7 @@ export default function LucidProject() {
             <span style={{ color: '#999' }}>STATUS</span>
             <span style={{ color: '#111', fontWeight: 500 }}>CONCEPT · DETECTION MVP</span>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Full-width image */}
@@ -75,7 +89,7 @@ export default function LucidProject() {
           {...fadeUp}
           style={{ width: '100%', maxWidth: 1400, aspectRatio: '16/9', backgroundColor: '#f0f0f0', borderRadius: 16, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 40px 80px -20px rgba(0,0,0,0.1)' }}
         >
-          <div style={{ fontSize: 12, letterSpacing: '0.1em', color: '#999', textTransform: 'uppercase' }}>[ LUCID IMAGE 1 ]</div>
+          <img src="/lucid-bg.jpeg" style={{width:'100%',height:'100%',objectFit:'cover',display:'block',borderRadius:8}} alt="Lucid dashboard" />
         </motion.div>
       </section>
 
@@ -153,7 +167,7 @@ export default function LucidProject() {
           <div style={{ fontSize: 'clamp(24px, 2.5vw, 32px)', fontWeight: 700, color: '#111', lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: 40 }}>
             The gap was in how every existing product defined the user.
           </div>
-          {imgPlaceholder('[ LUCID IMAGE 2 ]')}
+          <img src="/lucid-meera-calm.png" style={{width:'100%',height:'100%',objectFit:'cover',display:'block',borderRadius:8}} alt="Lucid protected view" />
         </div>
         <div style={{ flex: '2 1 500px', display: 'flex', flexDirection: 'column', gap: 32 }}>
           <div style={{ fontSize: 'clamp(18px, 2vw, 22px)', color: '#444', lineHeight: 1.6, fontWeight: 400 }}>
@@ -173,7 +187,7 @@ export default function LucidProject() {
       {/* 02 — Ruthless Prioritization */}
       <motion.section
         {...fadeUp}
-        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto', borderTop: '1px solid #eaeaea' }}
+        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto' }}
       >
         <div style={{ display: 'flex', gap: 'clamp(60px, 10vw, 140px)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <div style={{ flex: '1 1 300px' }}>
@@ -212,7 +226,7 @@ export default function LucidProject() {
       {/* 03 — Architecture Insight */}
       <motion.section
         {...fadeUp}
-        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto', display: 'flex', gap: 'clamp(60px, 10vw, 140px)', flexWrap: 'wrap', alignItems: 'flex-start', borderTop: '1px solid #eaeaea' }}
+        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto', display: 'flex', gap: 'clamp(60px, 10vw, 140px)', flexWrap: 'wrap', alignItems: 'flex-start' }}
       >
         <div style={{ flex: '1 1 300px' }}>
           <div style={{ fontSize: 13, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#111', fontWeight: 700, marginBottom: 24 }}>
@@ -222,7 +236,7 @@ export default function LucidProject() {
           <div style={{ fontSize: 'clamp(24px, 2.5vw, 32px)', fontWeight: 700, color: '#111', lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: 40 }}>
             Passive detection. Guardian routing. Privacy as constraint.
           </div>
-          {imgPlaceholder('[ LUCID IMAGE 3 ]', '1/1')}
+          <img src="/lucid-meera-alert.png" style={{width:'100%',height:'100%',objectFit:'cover',display:'block',borderRadius:8}} alt="Lucid alert state" />
         </div>
         <div style={{ flex: '2 1 500px', display: 'flex', flexDirection: 'column', gap: 40 }}>
           <div>
@@ -244,7 +258,7 @@ export default function LucidProject() {
       {/* 04 — Competitive Gap */}
       <motion.section
         {...fadeUp}
-        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto', borderTop: '1px solid #eaeaea' }}
+        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto' }}
       >
         <div style={{ display: 'flex', gap: 'clamp(60px, 10vw, 140px)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <div style={{ flex: '1 1 300px' }}>
@@ -352,7 +366,7 @@ export default function LucidProject() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1 }}
-        style={{ borderTop: '1px solid #eaeaea', marginTop: 80 }}
+        style={{ marginTop: 80 }}
       >
         <Link
           to="/projects/specter"

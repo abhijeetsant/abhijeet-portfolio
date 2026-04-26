@@ -63,7 +63,7 @@ export default function Hero() {
         background: 'rgba(15,15,15,0.85)',
         backdropFilter: 'blur(12px)'
       }}>
-        <div style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 30, fontWeight: 700, color: 'var(--white-hi)', letterSpacing: '0.04em' }}>AS</div>
+        <div style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 30, fontWeight: 700, color: 'var(--white-hi)', letterSpacing: '0.04em' }}>A.Sant</div>
         <div style={{ display: 'flex', gap: 40, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
           {['About', 'Work', 'Decisions', 'Contact'].map(link => (
             <a key={link} href={`#${link.toLowerCase()}`} style={{
@@ -88,7 +88,7 @@ export default function Hero() {
         {/* Photo */}
         <div style={{
           position: 'absolute', top: 56, right: 0,
-          width: '60%', height: 'calc(100vh - 56px)', overflow: 'hidden'
+          width: isWide ? '72%' : '100%', height: 'calc(100vh - 56px)', overflow: 'hidden'
         }}>
           <img
             src="/hero-photo.jpg"
@@ -112,20 +112,7 @@ export default function Hero() {
           }} />
         </div>
 
-        {/* Year tag */}
-        <motion.div
-          initial="hidden" animate="show"
-          variants={rise} custom={1.2}
-          style={{
-            position: 'absolute', top: 80, right: 48,
-            zIndex: 20, fontSize: 10, letterSpacing: '0.18em',
-            textTransform: 'uppercase', color: 'var(--white-lo)',
-            writingMode: 'vertical-rl'
-          }}>
-          Mumbai · India
-        </motion.div>
-
-        {/* Content */}
+{/* Content */}
         <div style={{
           position: 'relative', zIndex: 10,
           padding: '0 48px 72px 80px',
@@ -146,7 +133,7 @@ export default function Hero() {
             variants={rise} custom={0.5}
             style={{
               fontFamily: 'Kaisei Tokumin, serif',
-              fontSize: 'clamp(60px, 6.5vw, 92px)',
+              fontSize: 'clamp(48px, 7.5vw, 110px)',
               fontWeight: 800, lineHeight: 1,
               letterSpacing: '-0.02em',
               color: 'var(--white-hi)', marginBottom: 32,
@@ -160,7 +147,7 @@ export default function Hero() {
             variants={rise} custom={0.7}
             style={{
               fontFamily: 'Kaisei Tokumin, serif',
-              fontSize: 'clamp(22px, 2.8vw, 36px)',
+              fontSize: 'clamp(18px, 2.8vw, 36px)',
               fontWeight: 400, lineHeight: 1.2,
               color: 'var(--white-mid)', marginBottom: 44
             }}>
@@ -183,7 +170,7 @@ export default function Hero() {
                 }}>{pill}</span>
               ))}
             </div>
-            <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--white-lo)', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--white-lo)', display: isWide ? 'flex' : 'none', alignItems: 'center', gap: 10 }}>
               <div style={{ width: 32, height: 0.5, background: 'var(--white-lo)' }} />
               Scroll
             </div>

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 
 const rise = {
@@ -44,6 +44,12 @@ const SOCIAL = [
 
 export default function About() {
   const ref = useRef(null)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   return (
     <section
@@ -51,12 +57,13 @@ export default function About() {
       id="about"
       style={{
         background: 'var(--bg-dark)',
-        height: '100vh',
+        height: isMobile ? 'auto' : '100vh',
         position: 'relative',
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         alignItems: 'center',
         gap: 'clamp(20px, 4vw, 80px)',
-        padding: '0 clamp(20px, 6vw, 80px)',
+        padding: isMobile ? '60px clamp(20px, 6vw, 80px)' : '0 clamp(20px, 6vw, 80px)',
         overflow: 'hidden'
       }}
     >
@@ -65,8 +72,8 @@ export default function About() {
         flexShrink: 0,
         marginLeft: 0,
         width: '100%',
-        maxWidth: 460,
-        height: '75vh',
+        maxWidth: isMobile ? '100%' : 460,
+        height: isMobile ? '50vh' : '75vh',
         borderRadius: 16,
         overflow: 'hidden',
       }}>
@@ -95,8 +102,9 @@ export default function About() {
         display: 'flex',
         flexDirection: 'column',
         gap: 0,
-        paddingLeft: '80px',
-        height: '75vh',
+        paddingLeft: isMobile ? 0 : '80px',
+        paddingTop: isMobile ? '40px' : 0,
+        height: isMobile ? 'auto' : '75vh',
         justifyContent: 'center',
       }}>
 

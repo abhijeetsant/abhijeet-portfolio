@@ -22,9 +22,9 @@ const PROJECTS = [
 export default function SelectedProjects() {
   return (
     <section id="projects" style={{ background: 'var(--bg-light)', padding: '0 0 120px' }}>
-      <div style={{ textAlign: 'center', padding: '80px 80px 88px', borderBottom: '0.5px solid var(--border-light)' }}>
-        <span style={{ fontSize: 28, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--text-muted)', fontFamily: 'Geist, sans-serif' }}>
-          Selected Projects
+      <div style={{ textAlign: 'center', padding: '80px 80px 88px' }}>
+        <span style={{ fontFamily: 'Kaisei Tokumin, serif', fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 44px)', color: '#111111', letterSpacing: 0 }}>
+          Selected projects.
         </span>
       </div>
       {PROJECTS.map((project, i) => (
@@ -104,11 +104,7 @@ function ProjectRow({ project, index, isLast }) {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         style={{ borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: project.color, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
-        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${project.color} 0%, #2a2a4a 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 'clamp(18px, 2vw, 28px)', fontWeight: 800, color: 'rgba(255,255,255,0.15)', letterSpacing: '-0.02em' }}>
-            {project.name}
-          </span>
-        </div>
+        <div style={{ position: 'absolute', inset: 0, background: project.name === 'Lucid' ? `linear-gradient(to bottom, rgba(10,22,40,0.4) 0%, rgba(10,22,40,0.9) 100%), url(/lucid-bg.jpeg)` : project.name === 'Specter' ? `linear-gradient(to bottom, rgba(13,13,26,0.3) 0%, rgba(13,13,26,0.9) 100%), url(/specter-hero.jpeg)` : `linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%), url(/sioki-bg.png)`, backgroundSize: 'cover', backgroundPosition: project.name === 'Lucid' ? 'center top' : 'center' }} />
         <AnimatePresence>
           {hovered && (
             <motion.div
