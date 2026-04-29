@@ -98,7 +98,7 @@ export default function Footer() {
       {/* Four column info */}
       <div style={{ background: T.bg, padding: "40px 60px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 40, borderTop: `0.5px solid ${T.bd}` }}>
         <div>
-          <CopyField value="abhijeetsant@gmail.com" />
+          <CopyField value="abhijeetsant10@gmail.com" />
           <CopyField value="+917447242883" display="+91 744 724 2883" />
         </div>
         <div>

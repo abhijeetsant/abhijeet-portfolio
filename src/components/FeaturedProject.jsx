@@ -31,7 +31,7 @@ export default function FeaturedProject() {
           color: '#111111',
           letterSpacing: 0,
         }}>
-          Featured project.
+          Featured product.
         </span>
       </div>
 

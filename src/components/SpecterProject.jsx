@@ -354,6 +354,37 @@ export default function SpecterProject() {
         </div>
       </motion.section>
 
+      {/* Try Specter CTA */}
+      <motion.section
+        {...fadeUp}
+        style={{ padding: '120px clamp(20px, 4vw, 60px)', maxWidth: 1200, margin: '0 auto' }}
+      >
+        <div style={{ fontSize: 13, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#111', fontWeight: 700, marginBottom: 24 }}>
+          TRY IT
+        </div>
+        <div style={{ width: '100%', height: '2px', backgroundColor: '#111', marginBottom: 40 }} />
+        <div style={{ fontSize: 'clamp(32px, 4vw, 56px)', fontWeight: 800, color: '#111', lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 24 }}>
+          Try Specter.
+        </div>
+        <div style={{ fontSize: 'clamp(18px, 2vw, 22px)', color: '#666', lineHeight: 1.6, maxWidth: 600, marginBottom: 40 }}>
+          Interview a frustrated Zomato user right now. No sign-up. No setup. The experience is the pitch.
+        </div>
+        <Link to="/specter" style={{
+          display: 'inline-block',
+          marginTop: 24,
+          padding: '14px 32px',
+          background: '#0f0f0f',
+          color: '#F5F4F1',
+          fontFamily: 'Geist, sans-serif',
+          fontSize: 13,
+          fontWeight: 500,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          textDecoration: 'none',
+          borderRadius: 100
+        }}>Try Specter Live →</Link>
+      </motion.section>
+
       {/* Back to portfolio footer */}
       <motion.section
         initial={{ opacity: 0 }}

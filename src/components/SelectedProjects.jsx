@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const PROJECTS = [
@@ -36,6 +36,14 @@ export default function SelectedProjects() {
 
 function ProjectRow({ project, index, isLast }) {
   const [hovered, setHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const handler = e => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   return (
     <Link to={project.to} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
@@ -48,9 +56,9 @@ function ProjectRow({ project, index, isLast }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: 'grid',
-        gridTemplateColumns: '1fr auto',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr auto',
         alignItems: 'center',
-        gap: 60,
+        gap: isMobile ? 24 : 60,
         padding: '48px clamp(24px, 10vw, 250px)',
         borderBottom: isLast ? 'none' : '0.5px solid var(--border-light)',
         textDecoration: 'none',
@@ -100,9 +108,9 @@ function ProjectRow({ project, index, isLast }) {
       </div>
 
       <motion.div
-        animate={{ height: hovered ? 240 : 140, width: hovered ? 380 : 300 }}
+        animate={isMobile ? { height: 200, width: '100%' } : { height: hovered ? 240 : 140, width: hovered ? 380 : 300 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        style={{ borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: project.color, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        style={{ borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: project.color, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', ...(isMobile ? { width: '100%', height: 200 } : {}) }}
       >
         <div style={{ position: 'absolute', inset: 0, background: project.name === 'Lucid' ? `linear-gradient(to bottom, rgba(10,22,40,0.4) 0%, rgba(10,22,40,0.9) 100%), url(/lucid-bg.jpeg)` : project.name === 'Specter' ? `linear-gradient(to bottom, rgba(13,13,26,0.3) 0%, rgba(13,13,26,0.9) 100%), url(/specter-hero.jpeg)` : `linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%), url(/sioki-bg.png)`, backgroundSize: 'cover', backgroundPosition: project.name === 'Lucid' ? 'center top' : 'center' }} />
         <AnimatePresence>

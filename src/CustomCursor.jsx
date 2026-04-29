@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 
 export default function CustomCursor() {
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return null
+
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [cursorState, setCursorState] = useState('default') // 'default' | 'pointer' | 'view-project'
 

@@ -100,7 +100,7 @@ export default function Footer() {
       {/* Two column info */}
       <div style={{ background: T.bg, padding: "60px clamp(20px,6vw,80px)", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", alignItems: "start", borderTop: "1px solid rgba(245,244,241,0.1)" }}>
         <div>
-          <CopyField value="abhijeetsant@gmail.com" />
+          <CopyField value="abhijeetsant10@gmail.com" />
           <CopyField value="+917447242883" display="+91 744 724 2883" />
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>

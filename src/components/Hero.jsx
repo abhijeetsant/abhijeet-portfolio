@@ -64,7 +64,7 @@ export default function Hero() {
         backdropFilter: 'blur(12px)'
       }}>
         <div style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 30, fontWeight: 700, color: 'var(--white-hi)', letterSpacing: '0.04em' }}>A.Sant</div>
-        <div style={{ display: 'flex', gap: 40, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
           {['About', 'Work', 'Decisions', 'Contact'].map(link => (
             <a key={link} href={`#${link.toLowerCase()}`} style={{
               fontSize: 20, color: 'var(--white-mid)', textDecoration: 'none',
