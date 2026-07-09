@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
+import Nav from './Nav'
 
 const CYCLING_WORDS = [
   'Ambiguity-reducer',
@@ -19,7 +20,6 @@ const rise = {
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
-  const [clock, setClock] = useState('')
   const [isWide, setIsWide] = useState(window.innerWidth >= 768)
 
   useEffect(() => {
@@ -27,20 +27,6 @@ export default function Hero() {
       setWordIndex(i => (i + 1) % CYCLING_WORDS.length)
     }, 2200)
     return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    const tick = () => {
-      const ist = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
-      const d = new Date(ist)
-      const h = String(d.getHours()).padStart(2, '0')
-      const m = String(d.getMinutes()).padStart(2, '0')
-      const s = String(d.getSeconds()).padStart(2, '0')
-      setClock(`${h}:${m}:${s} IST`)
-    }
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
   }, [])
 
   useEffect(() => {
@@ -54,28 +40,7 @@ export default function Hero() {
 
   return (
     <>
-      {/* Nav */}
-      <nav style={{
-        position: 'fixed', top: 0, left: 0, right: 0,
-        zIndex: 100, display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', padding: '0 48px',
-        height: 56, borderBottom: '0.5px solid var(--border-dark)',
-        background: 'rgba(15,15,15,0.85)',
-        backdropFilter: 'blur(12px)'
-      }}>
-        <div style={{ fontFamily: 'Kaisei Tokumin, serif', fontSize: 30, fontWeight: 700, color: 'var(--white-hi)', letterSpacing: '0.04em' }}>A.Sant</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-          {['About', 'Work', 'Decisions', 'Contact'].map(link => (
-            <a key={link} href={`#${link.toLowerCase()}`} style={{
-              fontSize: 20, color: 'var(--white-mid)', textDecoration: 'none',
-              letterSpacing: '0.08em', textTransform: 'uppercase'
-            }}>{link}</a>
-          ))}
-        </div>
-        <div style={{ fontSize: 11, color: 'var(--white-lo)', letterSpacing: '0.1em', fontVariantNumeric: 'tabular-nums' }}>
-          {clock}
-        </div>
-      </nav>
+      <Nav />
 
       {/* Hero */}
       <section style={{
